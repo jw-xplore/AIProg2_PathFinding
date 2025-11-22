@@ -197,7 +197,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="MapRenderer.cpp" />
+    <ClCompile Include="MapEntity.cpp" />
     <ClCompile Include="PathFinding.cpp" />
     <ClCompile Include="SteeringBehavior.cpp" />
   </ItemGroup>
@@ -207,7 +207,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="MapRenderer.h" />
+    <ClInclude Include="MapEntity.h" />
     <ClInclude Include="PathFinding.h" />
     <ClInclude Include="SteeringBehavior.h" />
   </ItemGroup>

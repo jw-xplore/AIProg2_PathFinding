@@ -1,16 +1,21 @@
 #include "PathFinding.h"
 
-PathFinding::PathFinding(const char** map, int width, int height)
+PathFinding::PathFinding(MapEntity* mapEntity)
 {
-	for (int y = 0; y < height; y++)
+	mapRef = mapEntity;
+
+	for (int y = 0; y < mapEntity->height; y++)
 	{
-		for (int x = 0; x < width; x++)
+		for (int x = 0; x < mapEntity->width; x++)
 		{
+			if (mapEntity->map[y][x] == 'X')
+				continue;
+
 			Node* node = new Node();
 			node->x = x;
 			node->y = y;
 
-			AddConnectionsToNode(node, x, y, width, height, map);
+			AddConnectionsToNode(node, x, y, mapEntity->width, mapEntity->height, mapEntity->map);
 
 			mapGraph.insert(mapGraph.end(), node);
 		}
@@ -20,7 +25,7 @@ PathFinding::PathFinding(const char** map, int width, int height)
 void PathFinding::AddConnectionsToNode(Node* node, int x, int y, int width, int height, const char** map)
 {
 	// Top
-	if (y < height && map[x][y+1] != 'X')
+	if (y < height && map[y+1][x] != 'X')
 	{
 		Connection* link = new Connection();
 		link->x = x;
@@ -31,7 +36,7 @@ void PathFinding::AddConnectionsToNode(Node* node, int x, int y, int width, int 
 	}
 
 	// Right
-	if (x < width && map[x+1][y] != 'X')
+	if (x < width && map[y][x+1] != 'X')
 	{
 		Connection* link = new Connection();
 		link->x = x + 1;
@@ -42,7 +47,7 @@ void PathFinding::AddConnectionsToNode(Node* node, int x, int y, int width, int 
 	}
 
 	// Bottom
-	if (y > 0 && map[x][y - 1] != 'X')
+	if (y > 0 && map[y - 1][x] != 'X')
 	{
 		Connection* link = new Connection();
 		link->x = x;
@@ -53,7 +58,7 @@ void PathFinding::AddConnectionsToNode(Node* node, int x, int y, int width, int 
 	}
 
 	// Left
-	if (x > 0 && map[x - 1][y] != 'X')
+	if (x > 0 && map[y][x - 1] != 'X')
 	{
 		Connection* link = new Connection();
 		link->x = x - 1;
@@ -61,6 +66,23 @@ void PathFinding::AddConnectionsToNode(Node* node, int x, int y, int width, int 
 		link->weight = 1;
 
 		node->connections.insert(node->connections.end(), link);
+	}
+}
+
+void PathFinding::DrawGraph()
+{
+	int halfSize = mapRef->tileSize * 0.5f;
+
+	for (int i = 0; i < mapGraph.size(); i++)
+	{
+		Play::Point2D nodePos = { mapGraph[i]->x * mapRef->tileSize + halfSize, mapGraph[i]->y * mapRef->tileSize + halfSize };
+		Play::DrawCircle(nodePos, 6, cGreen);
+
+		for (int n = 0; n < mapGraph[i]->connections.size(); n++)
+		{
+			Play::Point2D pos = { mapGraph[i]->connections[n]->x * mapRef->tileSize + halfSize, mapGraph[i]->connections[n]->y * mapRef->tileSize + halfSize };
+			Play::DrawLine(nodePos, pos, cRed);
+		}
 	}
 }
 

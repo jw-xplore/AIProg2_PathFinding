@@ -24,7 +24,7 @@
     <ClCompile Include="SteeringBehavior.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapRenderer.cpp">
+    <ClCompile Include="MapEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PathFinding.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="SteeringBehavior.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapRenderer.h">
+    <ClInclude Include="MapEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PathFinding.h">

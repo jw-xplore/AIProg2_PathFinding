@@ -1,4 +1,4 @@
-#include "MapRenderer.h"
+#include "MapEntity.h"
 
 MapEntity::MapEntity(const char* path)
 {
@@ -14,7 +14,7 @@ void MapEntity::Draw()
 			Colour color = cYellow;
 			switch (this->map[y][x])
 			{
-			case 'X': color = cBlack; break; // Wall
+			case 'X': color = cGrey; break; // Wall
 			case 'S': color = cGreen; break; // Start
 			case 'G': color = cRed; break; // Goal
 			}

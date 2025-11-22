@@ -3,13 +3,15 @@
 #include "Play.h"
 #include "EntityManager.h"
 #include "Agent.h"
-#include "MapRenderer.h"
+#include "MapEntity.h"
+#include "PathFinding.h"
 
 EntityManager* entityManager;
 Agent* agent;
 
 SteeringBehavior* steeringBehavior;
-MapEntity* mapRenderer;
+MapEntity* mapEntity;
+PathFinding* pathFinding;
 
 // The entry point for a PlayBuffer program
 void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
@@ -19,11 +21,13 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	// Setup entity manager and entities
 	entityManager = new EntityManager();
 	steeringBehavior = new SteeringBehavior();
-	mapRenderer = new MapEntity("Data/Maps/Map3.txt");
+	mapEntity = new MapEntity("Data/Maps/Map1.txt");
 
 	agent = new Agent({100, 100}, steeringBehavior);
 	entityManager->AddEntity(agent);
-	entityManager->AddEntity(mapRenderer);
+	entityManager->AddEntity(mapEntity);
+
+	pathFinding = new PathFinding(mapEntity);
 
 	Play::CentreAllSpriteOrigins();
 }
@@ -33,6 +37,8 @@ bool MainGameUpdate( float elapsedTime )
 {
 	Play::ClearDrawingBuffer( Play::cBlack );
 	entityManager->UpdateEntities(elapsedTime);
+
+	pathFinding->DrawGraph();
 
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown( KEY_ESCAPE );

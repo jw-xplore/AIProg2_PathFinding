@@ -7,13 +7,12 @@
 
 class MapEntity : public Entity
 {
-private:
+public:
 	const char** map;
 	int tileSize = 16;
 	int width = 0;
 	int height = 0;
 
-public:
 	MapEntity(const char* path);
 
 	void Draw() override;
