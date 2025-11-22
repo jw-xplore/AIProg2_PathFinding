@@ -9,7 +9,7 @@ EntityManager* entityManager;
 Agent* agent;
 
 SteeringBehavior* steeringBehavior;
-MapRenderer* mapRenderer;
+MapEntity* mapRenderer;
 
 // The entry point for a PlayBuffer program
 void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
@@ -19,7 +19,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	// Setup entity manager and entities
 	entityManager = new EntityManager();
 	steeringBehavior = new SteeringBehavior();
-	mapRenderer = new MapRenderer("Data/Maps/Map3.txt");
+	mapRenderer = new MapEntity("Data/Maps/Map3.txt");
 
 	agent = new Agent({100, 100}, steeringBehavior);
 	entityManager->AddEntity(agent);

@@ -1,11 +1,11 @@
 #include "MapRenderer.h"
 
-MapRenderer::MapRenderer(const char* path)
+MapEntity::MapEntity(const char* path)
 {
 	LoadMap(path);
 }
 
-void MapRenderer::Draw()
+void MapEntity::Draw()
 {
 	for (int y = 0; y < this->height; y++)
 	{
@@ -26,7 +26,7 @@ void MapRenderer::Draw()
 	}
 }
 
-bool MapRenderer::LoadMap(const char* path)
+bool MapEntity::LoadMap(const char* path)
 {
 	// Load file
 	std::ifstream file;

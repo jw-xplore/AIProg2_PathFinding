@@ -5,7 +5,7 @@
 #include <sstream>
 #include <string>
 
-class MapRenderer : public Entity
+class MapEntity : public Entity
 {
 private:
 	const char** map;
@@ -14,7 +14,7 @@ private:
 	int height = 0;
 
 public:
-	MapRenderer(const char* path);
+	MapEntity(const char* path);
 
 	void Draw() override;
 
