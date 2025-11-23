@@ -28,6 +28,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	entityManager->AddEntity(mapEntity);
 
 	pathFinding = new PathFinding(mapEntity);
+	//pathFinding->Dijkstra({ 1,1 }, { 14, 14 });
 
 	Play::CentreAllSpriteOrigins();
 }
@@ -39,6 +40,7 @@ bool MainGameUpdate( float elapsedTime )
 	entityManager->UpdateEntities(elapsedTime);
 
 	pathFinding->DrawGraph();
+	pathFinding->Dijkstra({ 1,1 }, { 14, 14 });
 
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown( KEY_ESCAPE );
