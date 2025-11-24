@@ -106,20 +106,23 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 
 	int startI = mapRef->width * start.y + start.x;
 	Node* startNode = NodeFromPostion(start.x, start.y);
+
+	int endI = mapRef->width * end.y + end.x;
 	Node* endNode = NodeFromPostion(end.x, end.y);
 
 	std::vector<float> distances;
 	std::vector<bool> visited;
 
+	std::vector<int> prevNodes;
+
 	for (int i = 0; i < mapGraph.size(); i++)
 	{
 		distances.insert(distances.end(), max);
 		visited.insert(visited.end(), false);
+		prevNodes.insert(prevNodes.end(), -1);
 	}
 
 	distances[startI] = 0;
-
-	std::vector<Node*> path;
 
 	//std::vector <std::pair<Node*, float>> pathPairs;
 	//pathPairs.insert(pathPairs.end(), { startNode, 0 });
@@ -146,6 +149,7 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 			float newDist = distances[ni] + checking->connections[i]->weight;
 			if (newDist < distances[ci])
 			{
+				prevNodes[ci] = ni;
 				distances[ci] = newDist;
 				prioPath.push({ connected, newDist });
 			}
@@ -153,6 +157,7 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 	}
 
 	// Debug draw
+	/*
 	for (int i = 0; i < distances.size(); i++)
 	{
 		if (distances[i] == max)
@@ -162,8 +167,36 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 		Play:Point2D pos = { (i % mapRef->height) * mapRef->tileSize + halfSize, (i / mapRef->width) * mapRef->tileSize + halfSize };
 		Play::DrawCircle(pos, 4, Play::cGreen);
 	}
+	*/
 
-	// Get path format
+	// Get shortest path
+	std::vector<Node*> path;
+	if (distances[endI] == max)
+		return path;
+
+	for (int at = endI; at != -1; at = prevNodes[at])
+	{
+		path.push_back(mapGraph[at]);
+	}
+
+	// Debug draw
+	for (int i = 0; i < path.size(); i++)
+	{
+		int halfSize = mapRef->tileSize * 0.5f;
+		float x = path[i]->x * mapRef->tileSize + halfSize;
+		float y = path[i]->y * mapRef->tileSize + halfSize;
+		Play:Point2D pos = { x, y };
+		Play::DrawCircle(pos, 4, Play::cGreen);
+	}
+
+	/*
+	while (nCheck != nullptr)
+	{
+		path.insert(path.end(), nCheck);
+		nCheck = nCheck.
+	}
+	*/
+
 	return path;
 	/*
 	std::sort(distances.begin(), distances.end());

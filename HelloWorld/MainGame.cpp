@@ -41,6 +41,7 @@ bool MainGameUpdate( float elapsedTime )
 
 	pathFinding->DrawGraph();
 	pathFinding->Dijkstra({ 1,1 }, { 14, 14 });
+	//pathFinding->Dijkstra({ 1,1 }, { 24, 23 });
 
 	Play::PresentDrawingBuffer();
 	return Play::KeyDown( KEY_ESCAPE );
