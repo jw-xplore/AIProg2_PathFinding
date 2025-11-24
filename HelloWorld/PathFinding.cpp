@@ -124,17 +124,20 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 
 	distances[startI] = 0;
 
-	//std::vector <std::pair<Node*, float>> pathPairs;
-	//pathPairs.insert(pathPairs.end(), { startNode, 0 });
-	std::priority_queue<std::pair<Node*, float>> prioPath;
-	prioPath.push({ startNode, 0 });
+	std::priority_queue<
+		std::pair<float, Node*>,
+		std::vector<std::pair<float, Node*>>,
+		std::greater<std::pair<float, Node*>>
+	> prioPath;
+
+	prioPath.push({ 0, startNode });
 
 	Node* checking;
 	int pathSoFar = 0;
 
 	while (!prioPath.empty())
 	{
-		checking = prioPath.top().first;
+		checking = prioPath.top().second;
 		prioPath.pop();
 		int ni = mapRef->width * checking->y + checking->x;
 		visited[ni] = true;
@@ -151,23 +154,10 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 			{
 				prevNodes[ci] = ni;
 				distances[ci] = newDist;
-				prioPath.push({ connected, newDist });
+				prioPath.push({ newDist, connected });
 			}
 		}
 	}
-
-	// Debug draw
-	/*
-	for (int i = 0; i < distances.size(); i++)
-	{
-		if (distances[i] == max)
-			continue;
-
-		int halfSize = mapRef->tileSize * 0.5f;
-		Play:Point2D pos = { (i % mapRef->height) * mapRef->tileSize + halfSize, (i / mapRef->width) * mapRef->tileSize + halfSize };
-		Play::DrawCircle(pos, 4, Play::cGreen);
-	}
-	*/
 
 	// Get shortest path
 	std::vector<Node*> path;
@@ -189,60 +179,8 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 		Play::DrawCircle(pos, 4, Play::cGreen);
 	}
 
-	/*
-	while (nCheck != nullptr)
-	{
-		path.insert(path.end(), nCheck);
-		nCheck = nCheck.
-	}
-	*/
 
 	return path;
-	/*
-	std::sort(distances.begin(), distances.end());
-	for (int i = 0; i < distances.size(); i++)
-	{
-		if (distances[i] == max)
-			break;
-
-		path.insert(path.end(), );
-	}
-	*/
-
-	/*
-	while (checking != endNode)
-	{
-		Node* bestNode = checking->connections[0]->node;
-		int bestI = mapRef->width * bestNode->y + bestNode->x;
-		int bestDist = pathSoFar + checking->connections[0]->weight;
-
-		for (int i = 0; i < checking->connections.size(); i++)
-		{
-			Node* current = checking->connections[i]->node;
-			int currentI = mapRef->width * current->y + current->x;
-
-			// Update with shorter weight
-			int dist = pathSoFar + checking->connections[i]->weight;
-			if (distances[currentI] > dist)
-			{
-				distances[currentI] = dist;
-			}
-
-			// Choose best
-			if (bestDist > dist)
-			{
-				bestDist = dist;
-				bestNode = checking->connections[i]->node;
-				bestI = mapRef->width * bestNode->y + bestNode->x;
-			}
-		}
-
-		pathSoFar = bestDist;
-		checking = bestNode;
-	}
-
-	return path;
-	*/
 }
 
 // Return list of points using A* algorhytm
