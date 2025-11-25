@@ -186,11 +186,28 @@ std::vector<Node*> PathFinding::Dijkstra(Play::Point2D start, Play::Point2D end)
 // Return list of points using A* algorhytm
 std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end, const char** map)
 {
-	std::vector<Node*> path;
-	return path;
+	// Find start and end
+	int startI = mapRef->width * start.y + start.x;
+	Node* startNode = NodeFromPostion(start.x, start.y);
+
+	int endI = mapRef->width * end.y + end.x;
+	Node* endNode = NodeFromPostion(end.x, end.y);
+
+	// Initialize start node
+	NodeRecord startRecord;
+	startRecord.node = startNode;
+	startRecord.costSoFar = 0;
+	startRecord.costEstimated = ManhattanHeuristics(startNode, endNode);
+
+
 }
 
 Node* PathFinding::NodeFromPostion(int x, int y)
 {
 	return mapGraph[mapRef->width * y + x];
+}
+
+float ManhattanHeuristics(Node* start, Node* end)
+{
+	return abs((end->x - start->x) + (end->y - start->y));
 }

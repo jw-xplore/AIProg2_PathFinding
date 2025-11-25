@@ -20,6 +20,14 @@ struct Node
 	std::vector<Connection*> connections;
 };
 
+struct NodeRecord
+{
+	Node* node;
+	Connection* connection;
+	float costSoFar;
+	float costEstimated;
+};
+
 class PathFinding
 {
 public:
@@ -36,7 +44,7 @@ public:
 	std::vector<Node*> AStar(Play::Point2D start, Play::Point2D end, const char** map);
 
 	Node* NodeFromPostion(int x, int y);
-	float ManhattanDistance(Play::Point2D start, Play::Point2D end);
-	float EuclideanDistance();
+	float ManhattanHeuristics(Node* start, Node* end);
+	float EuclideanHeuristic();
 };
 
