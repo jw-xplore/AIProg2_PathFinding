@@ -194,12 +194,55 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end, co
 	Node* endNode = NodeFromPostion(end.x, end.y);
 
 	// Initialize start node
-	NodeRecord startRecord;
+	NodeRecordAs startRecord;
 	startRecord.node = startNode;
 	startRecord.costSoFar = 0;
 	startRecord.costEstimated = ManhattanHeuristics(startNode, endNode);
 
+	std::vector<NodeRecordAs> records;
+	records.insert(records.end(), startRecord);
 
+	// Setup open and closed list
+	std::vector<NodeRecordAs> open;
+	open.insert(open.end(), startRecord);
+
+	std::vector<NodeRecordAs> closed;
+
+	while (open.size() != 0)
+	{
+		// Find smallest record - smallest estimated cost
+		NodeRecordAs current = SmallestAsRecord(open);
+
+
+		// Is at the end?
+		if (current.node == endNode)
+			break;
+
+		// Loop through connections
+		for (int i = 0; i < current.node->connections.size(); i++)
+		{
+			Connection* connection = current.node->connections[i];
+
+			if (current.node->connections[i] == connection)
+			{
+
+			}
+
+			Node* endNode = connection->node;
+			float endNodeCost = current.costSoFar + connection->weight;
+
+			// Check node in closed list
+			/*
+			if (std::find(closed.begin(), closed.end(), current) != closed.end())
+			{
+
+			}
+			*/
+		}
+	}
+
+	std::vector<Node*> path;
+	return path;
 }
 
 Node* PathFinding::NodeFromPostion(int x, int y)
@@ -207,7 +250,32 @@ Node* PathFinding::NodeFromPostion(int x, int y)
 	return mapGraph[mapRef->width * y + x];
 }
 
-float ManhattanHeuristics(Node* start, Node* end)
+float PathFinding::ManhattanHeuristics(Node* start, Node* end)
 {
 	return abs((end->x - start->x) + (end->y - start->y));
 }
+
+NodeRecordAs PathFinding::SmallestAsRecord(std::vector<NodeRecordAs> list)
+{
+	NodeRecordAs record = list[0];
+
+	for (int i = 1; i < list.size(); i++)
+	{
+		if (record.costSoFar > list[i].costSoFar)
+			record = list[i];
+	}
+
+	return record;
+}
+
+bool PathFinding::ContainsAsRecord(const std::vector<NodeRecordAs>& list, const NodeRecordAs& record)
+{
+	return std::find(list.begin(), list.end(), record) != list.end();
+}
+
+/*
+NodeRecordAs PathFinding::FindAsRecordFromNode(std::vector<NodeRecordAs> list, Node* node)
+{
+
+}
+*/

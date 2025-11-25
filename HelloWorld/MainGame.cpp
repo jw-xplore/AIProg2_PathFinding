@@ -21,7 +21,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	// Setup entity manager and entities
 	entityManager = new EntityManager();
 	steeringBehavior = new SteeringBehavior();
-	mapEntity = new MapEntity("Data/Maps/Map1.txt");
+	mapEntity = new MapEntity("Data/Maps/Map2.txt");
 
 	agent = new Agent({100, 100}, steeringBehavior);
 	entityManager->AddEntity(agent);

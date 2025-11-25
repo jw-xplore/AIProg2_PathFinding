@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include <queue>
+#include <algorithm>
 #include "MapEntity.h"
 
 struct Node;
@@ -20,12 +21,16 @@ struct Node
 	std::vector<Connection*> connections;
 };
 
-struct NodeRecord
+struct NodeRecordAs
 {
 	Node* node;
 	Connection* connection;
 	float costSoFar;
 	float costEstimated;
+
+	bool operator==(const NodeRecordAs& other) const {
+		return node == other.node && costSoFar == other.costSoFar && costEstimated == other.costEstimated;
+	}
 };
 
 class PathFinding
@@ -45,6 +50,9 @@ public:
 
 	Node* NodeFromPostion(int x, int y);
 	float ManhattanHeuristics(Node* start, Node* end);
-	float EuclideanHeuristic();
+	//float EuclideanHeuristic();
+	NodeRecordAs SmallestAsRecord(std::vector<NodeRecordAs> list);
+	bool ContainsAsRecord(const std::vector<NodeRecordAs>& list, const NodeRecordAs& record);
+	NodeRecordAs FindAsRecordFromNode(std::vector<NodeRecordAs> list, Node* node);
 };
 
