@@ -21,7 +21,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	// Setup entity manager and entities
 	entityManager = new EntityManager();
 	steeringBehavior = new SteeringBehavior();
-	mapEntity = new MapEntity("Data/Maps/Map2.txt");
+	mapEntity = new MapEntity("Data/Maps/Map1.txt");
 
 	agent = new Agent({100, 100}, steeringBehavior);
 	entityManager->AddEntity(agent);
@@ -40,7 +40,8 @@ bool MainGameUpdate( float elapsedTime )
 	entityManager->UpdateEntities(elapsedTime);
 
 	pathFinding->DrawGraph();
-	pathFinding->Dijkstra({ 1,1 }, { 14, 14 });
+	pathFinding->AStar({ 1,1 }, { 14, 14 });
+	//pathFinding->Dijkstra({ 1,1 }, { 14, 14 });
 	//pathFinding->Dijkstra({ 1,1 }, { 24, 23 });
 
 	Play::PresentDrawingBuffer();

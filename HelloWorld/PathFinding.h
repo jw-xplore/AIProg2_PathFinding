@@ -11,6 +11,7 @@ struct Node;
 struct Connection
 {
 	//int x, y;
+	Node* fromNode;
 	Node* node;
 	float weight;
 };
@@ -46,13 +47,13 @@ public:
 	void DrawGraph();
 
 	std::vector<Node*> Dijkstra(Play::Point2D start, Play::Point2D end);
-	std::vector<Node*> AStar(Play::Point2D start, Play::Point2D end, const char** map);
+	std::vector<Node*> AStar(Play::Point2D start, Play::Point2D end);
 
 	Node* NodeFromPostion(int x, int y);
 	float ManhattanHeuristics(Node* start, Node* end);
 	//float EuclideanHeuristic();
 	NodeRecordAs SmallestAsRecord(std::vector<NodeRecordAs> list);
-	bool ContainsAsRecord(const std::vector<NodeRecordAs>& list, const NodeRecordAs& record);
-	NodeRecordAs FindAsRecordFromNode(std::vector<NodeRecordAs> list, Node* node);
+	bool ContainsAsRecord(const std::vector<NodeRecordAs>& list, Node* node);
+	NodeRecordAs* FindAsRecordFromNode(std::vector<NodeRecordAs>& list, Node* node);
 };
 
