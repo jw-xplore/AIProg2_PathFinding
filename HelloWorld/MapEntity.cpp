@@ -34,7 +34,7 @@ bool MapEntity::LoadMap(const char* path)
 
 	// Define array
 	int lines = std::count(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>(), '\n');
-	this->height = lines;
+	this->height = lines + 1;
 	this->map = new const char* [lines];
 
 	// Restart line reading

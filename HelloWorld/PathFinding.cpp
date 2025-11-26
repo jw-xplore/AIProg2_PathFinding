@@ -35,7 +35,7 @@ void PathFinding::AddConnectionsToNode(Node* node)
 	int y = node->y;
 
 	// Top
-	if (y < h && mapRef->map[y+1][x] != 'X')
+	if (y < h - 1 && mapRef->map[y+1][x] != 'X')
 	{
 		Connection* link = new Connection();
 		//link->x = x;
@@ -47,7 +47,7 @@ void PathFinding::AddConnectionsToNode(Node* node)
 	}
 
 	// Right
-	if (x < w && mapRef->map[y][x+1] != 'X')
+	if (x < w - 1 && mapRef->map[y][x+1] != 'X')
 	{
 		Connection* link = new Connection();
 		//link->x = x + 1;
@@ -200,9 +200,6 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 	startRecord.costSoFar = 0;
 	startRecord.costEstimated = ManhattanHeuristics(startNode, endNode);
 
-	std::vector<NodeRecordAs> records;
-	records.insert(records.end(), startRecord);
-
 	// Setup open and closed list
 	std::vector<NodeRecordAs> open;
 	open.insert(open.end(), startRecord);
@@ -239,13 +236,13 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 					continue;
 
 				// Remove from closed list if it is shortest path
-				closed.erase(std::remove(closed.begin(), closed.end(), currentNodeRecord), closed.end());
+				closed.erase(std::remove(closed.begin(), closed.end(), *currentNodeRecord), closed.end());
 
 				currentNodeHeuristics = currentNodeRecord->costEstimated - currentNodeRecord->costSoFar;
 			}
 			else if (ContainsAsRecord(open, currentNode)) // Skip if the node is open and we’ve not found a better route
 			{
-				currentNodeRecord = FindAsRecordFromNode(closed, currentNode);
+				currentNodeRecord = FindAsRecordFromNode(open, currentNode);
 
 				// Skip if route is not better
 				if (currentNodeRecord->costSoFar <= currentNodeCost)
@@ -278,7 +275,6 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 	// Format path
 	std::vector<Node*> path;
 
-	/*
 	// Failed to find end?
 	if (current.node != endNode)
 		return path; // Empty path
@@ -301,7 +297,7 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 		Play:Point2D pos = { x, y };
 		Play::DrawCircle(pos, 4, Play::cGreen);
 	}
-	*/
+
 	return path;
 }
 
