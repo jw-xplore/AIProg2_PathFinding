@@ -40,6 +40,7 @@ void PathFinding::AddConnectionsToNode(Node* node)
 		Connection* link = new Connection();
 		//link->x = x;
 		//link->y = y + 1;
+		link->fromNode = node;
 		link->node = NodeFromPostion(x, y + 1);
 		link->weight = 1;
 
@@ -52,6 +53,7 @@ void PathFinding::AddConnectionsToNode(Node* node)
 		Connection* link = new Connection();
 		//link->x = x + 1;
 		//link->y = y;
+		link->fromNode = node;
 		link->node = NodeFromPostion(x + 1, y);
 		link->weight = 1;
 
@@ -64,6 +66,7 @@ void PathFinding::AddConnectionsToNode(Node* node)
 		Connection* link = new Connection();
 		//link->x = x;
 		//link->y = y - 1;
+		link->fromNode = node;
 		link->node = NodeFromPostion(x, y - 1);
 		link->weight = 1;
 
@@ -76,6 +79,7 @@ void PathFinding::AddConnectionsToNode(Node* node)
 		Connection* link = new Connection();
 		//link->x = x - 1;
 		//link->y = y;
+		link->fromNode = node;
 		link->node = NodeFromPostion(x - 1, y);
 		link->weight = 1;
 
@@ -286,6 +290,7 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 	{
 		path.insert(path.end(), current.node);
 		trace = current.connection->fromNode;
+		current = current.connection->fromNode;
 	}
 
 	// Debug draw
