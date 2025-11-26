@@ -284,13 +284,10 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 		return path; // Empty path
 	
 	// Track path
-	Node* trace = current.node;
-
-	while (trace != startNode)
+	while (current.node != startNode)
 	{
 		path.insert(path.end(), current.node);
-		trace = current.connection->fromNode;
-		current = current.connection->fromNode;
+		current = *FindAsRecordFromNode(closed, current.connection->fromNode);
 	}
 
 	// Debug draw
