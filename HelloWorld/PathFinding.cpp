@@ -303,6 +303,83 @@ std::vector<Node*> PathFinding::AStar(Play::Point2D start, Play::Point2D end)
 	return path;
 }
 
+
+std::vector<Node*> PathFinding::DepthFirst(Play::Point2D start, Play::Point2D end)
+{
+	// Find start and end
+	int startI = mapRef->width * start.y + start.x;
+	Node* startNode = NodeFromPostion(start.x, start.y);
+
+	int endI = mapRef->width * end.y + end.x;
+	Node* endNode = NodeFromPostion(end.x, end.y);
+
+	// Initialize start node
+	NodeRecordAs startRecord;
+	startRecord.node = startNode;
+
+	std::vector<NodeRecordAs> visited;
+	//visited.insert(visited.end(), startRecord);
+
+	NodeRecordAs current = startRecord;
+	
+	/*
+	while (current.node != endNode)
+	{
+		
+	}
+	*/
+
+	std::vector<Node*> path;
+	DepthPath(visited, path, &current, endNode);
+
+	// Debug draw
+	for (int i = 0; i < path.size(); i++)
+	{
+		int halfSize = mapRef->tileSize * 0.5f;
+		float x = path[i]->x * mapRef->tileSize + halfSize;
+		float y = path[i]->y * mapRef->tileSize + halfSize;
+		Play:Point2D pos = { x, y };
+		Play::DrawCircle(pos, 4, Play::cGreen);
+	}
+
+	std::reverse(path.begin(), path.end());
+
+	return path;
+}
+
+bool PathFinding::DepthPath(std::vector<NodeRecordAs>& visited, std::vector<Node*>& path, NodeRecordAs* current, Node* target)
+{
+	visited.insert(visited.end(), *current);
+
+	for (int i = 0; i < current->node->connections.size(); i++)
+	{
+		Node* node = current->node->connections[i]->node;
+		NodeRecordAs* record = FindAsRecordFromNode(visited, node);
+		if (record != nullptr)
+			continue;
+
+		NodeRecordAs newRecord;
+		newRecord.node = node;
+		newRecord.connection = current->node->connections[i];
+
+		bool found = DepthPath(visited, path, &newRecord, target);
+		if (found || node == target)
+		{
+			path.insert(path.end(), newRecord.node);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/*
+std::vector<Node*> PathFinding::BreathFirst(Play::Point2D start, Play::Point2D end)
+{
+
+}
+*/
+
 Node* PathFinding::NodeFromPostion(int x, int y)
 {
 	return mapGraph[mapRef->width * y + x];

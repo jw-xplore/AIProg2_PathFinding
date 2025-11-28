@@ -48,6 +48,10 @@ public:
 
 	std::vector<Node*> Dijkstra(Play::Point2D start, Play::Point2D end);
 	std::vector<Node*> AStar(Play::Point2D start, Play::Point2D end);
+	std::vector<Node*> DepthFirst(Play::Point2D start, Play::Point2D end);
+	std::vector<Node*> BreathFirst(Play::Point2D start, Play::Point2D end);
+
+	bool DepthPath(std::vector<NodeRecordAs>& visited, std::vector<Node*>& path, NodeRecordAs* current, Node* target);
 
 	Node* NodeFromPostion(int x, int y);
 	float ManhattanHeuristics(Node* start, Node* end);
