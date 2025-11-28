@@ -373,12 +373,72 @@ bool PathFinding::DepthPath(std::vector<NodeRecordAs>& visited, std::vector<Node
 	return false;
 }
 
-/*
 std::vector<Node*> PathFinding::BreathFirst(Play::Point2D start, Play::Point2D end)
 {
+	// Find start and end
+	int startI = mapRef->width * start.y + start.x;
+	Node* startNode = NodeFromPostion(start.x, start.y);
 
+	int endI = mapRef->width * end.y + end.x;
+	Node* endNode = NodeFromPostion(end.x, end.y);
+
+	// Solve
+	std::vector<Node*> queue;
+	queue.insert(queue.end(), startNode);
+
+	std::vector<bool> visited;
+	std::vector<Node*> search;
+
+	for (int i = 0; i < mapGraph.size(); i++)
+	{
+		visited.insert(visited.end(), false);
+		search.insert(search.end(), nullptr);
+	}
+
+	visited[startI] = true;
+
+	while (queue.size() != 0)
+	{
+		Node* node = queue[0];
+		queue.erase(std::remove(queue.begin(), queue.end(), queue[0]), queue.end());
+
+		for (int i = 0; i < node->connections.size(); i++)
+		{
+			Node* child = node->connections[i]->node;
+
+			int pos = mapRef->width * child->y + child->x;
+			if (visited[pos] == false)
+			{
+				queue.insert(queue.end(), child);
+				visited[pos] = true;
+				search[pos] = node;
+			}
+		}
+	}
+
+	// Reconstruct
+	std::vector<Node*> path;
+	for (Node* at = endNode; at != nullptr; at = at)
+	{
+		path.push_back(at);
+		int i = mapRef->width * at->y + at->x;;
+		at = search[i];
+	}
+
+	std::reverse(path.begin(), path.end());
+
+	// Debug draw
+	for (int i = 0; i < path.size(); i++)
+	{
+		int halfSize = mapRef->tileSize * 0.5f;
+		float x = path[i]->x * mapRef->tileSize + halfSize;
+		float y = path[i]->y * mapRef->tileSize + halfSize;
+		Play:Point2D pos = { x, y };
+		Play::DrawCircle(pos, 4, Play::cBlue);
+	}
+
+	return path;
 }
-*/
 
 Node* PathFinding::NodeFromPostion(int x, int y)
 {

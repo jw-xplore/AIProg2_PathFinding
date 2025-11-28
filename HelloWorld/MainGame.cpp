@@ -43,7 +43,8 @@ bool MainGameUpdate( float elapsedTime )
 	//pathFinding->AStar({ 0,0 }, { 1, 2 });
 	//std::vector<Node*> path = pathFinding->AStar({ 1,1 }, { 14, 14 });
 	//std::vector<Node*> path = pathFinding->AStar({ 1,1 }, { 24, 23 });
-	std::vector<Node*> path = pathFinding->DepthFirst({ 1,1 }, { 24, 23 });
+	//std::vector<Node*> path = pathFinding->DepthFirst({ 1,1 }, { 24, 23 });
+	std::vector<Node*> path = pathFinding->BreathFirst({ 1,1 }, { 24, 23 });
 	int pCount = path.size();
 
 	//pathFinding->Dijkstra({ 1,1 }, { 24, 23 });
