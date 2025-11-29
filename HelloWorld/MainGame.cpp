@@ -21,7 +21,7 @@ void MainGameEntry( PLAY_IGNORE_COMMAND_LINE )
 	// Setup entity manager and entities
 	entityManager = new EntityManager();
 	steeringBehavior = new SteeringBehavior();
-	mapEntity = new MapEntity("Data/Maps/Map3.txt");
+	mapEntity = new MapEntity("Data/Maps/Map1.txt");
 
 	agent = new Agent({100, 100}, steeringBehavior);
 	entityManager->AddEntity(agent);
@@ -44,7 +44,8 @@ bool MainGameUpdate( float elapsedTime )
 	//std::vector<Node*> path = pathFinding->AStar({ 1,1 }, { 14, 14 });
 	//std::vector<Node*> path = pathFinding->AStar({ 1,1 }, { 24, 23 });
 	//std::vector<Node*> path = pathFinding->DepthFirst({ 1,1 }, { 24, 23 });
-	std::vector<Node*> path = pathFinding->BreathFirst({ 1,1 }, { 24, 23 });
+	//std::vector<Node*> path = pathFinding->BreathFirst({ 1,1 }, { 24, 23 });
+	std::vector<Node*> path = pathFinding->RayPathSearch({ 1,1 }, { 14, 14 });
 	int pCount = path.size();
 
 	//pathFinding->Dijkstra({ 1,1 }, { 24, 23 });

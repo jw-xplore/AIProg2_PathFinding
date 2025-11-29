@@ -440,6 +440,143 @@ std::vector<Node*> PathFinding::BreathFirst(Play::Point2D start, Play::Point2D e
 	return path;
 }
 
+std::vector<Node*> PathFinding::RayPathSearch(Play::Point2D start, Play::Point2D end)
+{
+	// Find start and end
+	int startI = mapRef->width * start.y + start.x;
+	Node* startNode = NodeFromPostion(start.x, start.y);
+
+	int endI = mapRef->width * end.y + end.x;
+	Node* endNode = NodeFromPostion(end.x, end.y);
+
+	int dir = 0;
+	float xDir = 0;
+	float yDir = 1;
+
+	std::vector<Node*> path;
+	path.insert(path.end(), startNode);
+	int currentI = 0;
+
+	bool* visited = new bool[mapGraph.size()];
+	for (int i = 0; i < mapGraph.size(); i++)
+	{
+		visited[i] = false;
+	}
+
+	visited[startI] = true;
+
+	while (path[currentI] != endNode)
+	{
+		// Trace back if there are no more nodes to visit
+		bool allVisited = true;
+
+		for (int i = 0; i < path[currentI]->connections.size(); i++)
+		{
+			Node* connected = path[currentI]->connections[i]->node;
+			int ci = mapRef->width * connected->y + connected->x;
+			if (visited[ci] == false)
+			{
+				allVisited = false;
+				break;
+			}
+		}
+
+		if (allVisited)
+		{
+			path.erase(std::remove(path.begin(), path.end(), path[currentI]), path.end());
+			currentI--;
+
+			if (currentI < 1)
+				break;
+
+			continue;
+		}
+
+		// Go in direction until reach end
+		Node* inPath = nullptr;
+
+		for (int i = 0; i < path[currentI]->connections.size(); i++)
+		{
+			Node* connected = path[currentI]->connections[i]->node;
+
+			// Can continue in the direction?
+			bool vis = visited[mapRef->width * connected->y + connected->x];
+
+			if (connected->x == path[currentI]->x + xDir && connected->y == path[currentI]->y + yDir && !vis)
+			{
+				/*
+				if (currentI == 15)
+				{
+					bool vis = visited[mapRef->width * connected->y + connected->x];
+					int a = 0;
+				}
+				*/
+
+				inPath = connected;
+				break;
+			}
+		}
+		
+		/*
+		bool invalid = true;
+
+		if (inPath != nullptr)
+			invalid = std::find(path.begin(), path.end(), inPath) == path.end();
+			*/
+
+		/*
+		if (std::find(path.begin(), path.end(), inPath) == path.end())
+		{
+			path.erase(std::remove(path.begin(), path.end(), path[currentI]), path.end());
+			currentI--;
+			break;
+		}
+		*/
+
+
+		// Change direction if can't continue
+		if (inPath == nullptr)
+		{
+			int startDir = dir;
+			dir++;
+
+			if (dir > 3)
+				dir = 0;
+
+			switch (dir)
+			{
+			case 0: xDir = 0; yDir = 1; break;
+			case 1: xDir = 1; yDir = 0; break;
+			case 2: xDir = 0; yDir = -1; break;
+			case 3: xDir = -1; yDir = 0; break;
+			}
+
+			continue;
+		}
+
+		// Continue to next
+		path.insert(path.end(), inPath);
+		int index = mapRef->width * inPath->y + inPath->x;
+		visited[index] = true;
+
+		currentI++;
+	}
+
+	delete visited;
+
+	// Debug draw
+	for (int i = 0; i < path.size(); i++)
+	{
+		int halfSize = mapRef->tileSize * 0.5f;
+		float x = path[i]->x * mapRef->tileSize + halfSize;
+		float y = path[i]->y * mapRef->tileSize + halfSize;
+		Play:Point2D pos = { x, y };
+		Play::DrawCircle(pos, 4, Play::cMagenta);
+	}
+
+	return path;
+}
+
 Node* PathFinding::NodeFromPostion(int x, int y)
 {
 	return mapGraph[mapRef->width * y + x];

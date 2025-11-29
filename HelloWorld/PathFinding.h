@@ -51,6 +51,8 @@ public:
 	std::vector<Node*> DepthFirst(Play::Point2D start, Play::Point2D end);
 	std::vector<Node*> BreathFirst(Play::Point2D start, Play::Point2D end);
 
+	std::vector<Node*> RayPathSearch(Play::Point2D start, Play::Point2D end);
+
 	bool DepthPath(std::vector<NodeRecordAs>& visited, std::vector<Node*>& path, NodeRecordAs* current, Node* target);
 
 	Node* NodeFromPostion(int x, int y);
